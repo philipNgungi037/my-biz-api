@@ -22,6 +22,11 @@ class UsersController < ApplicationController
         render json: { errors: 'Invalid email or password' }, status: :unauthorized
       end
     end
+
+      # View Current User Profile
+  def profile
+    render json: current_user, status: :ok
+  end
   
     private
   

@@ -6,10 +6,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   resources :users, only: [:create]
-  post 'login', to: 'users#login'
-
-   # Route for viewing the current user's profile
-   get 'profile', to: 'users#profile'
+  post '/login', to: 'auth#create'
+  get '/profile', to: 'users#profile'
 
   # Defines the root path route ("/")
   # root "posts#index"

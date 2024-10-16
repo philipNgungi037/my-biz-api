@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  skip_before_action :authorized, only: [:create]
+  skip_before_action :authorized, only: [:create, :index]
 
 
   def create
@@ -16,6 +16,19 @@ class UsersController < ApplicationController
 
   def profile
     render json: user
+  end
+
+  def index
+    render json: User.all
+  end
+
+  def show
+    user = User.find_by(id: params[:id])
+    if user
+      render json: user
+    else
+      render json: {error: "User Not Found"}, status: :not_found
+    end
   end
 
 private

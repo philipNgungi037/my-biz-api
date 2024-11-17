@@ -1,0 +1,141 @@
++--------------------------+
+|          User            |
+|--------------------------|
+| id                       |
+| username                 |
+| email                    |
+| password_digest          |
+| role_id                  | <-- Links to Role Table
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | belongs_to :role
+           | has_one :cart, dependent: :destroy
+           v
++--------------------------+
+|          Role            |
+|--------------------------|
+| id                       |
+| name (e.g., admin, user) |
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | has_many :permissions
+           v
++--------------------------+
+|       Permission         |
+|--------------------------|
+| id                       |
+| action (e.g., manage)    |
+| subject (e.g., Product)  |
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | belongs_to :role
+           v
++--------------------------+
+|       PermissionRule     |
+|--------------------------|
+| role_id                  |
+| permission_id            |
++--------------------------+
+
++--------------------------+
+|          Cart            |
+|--------------------------|
+| id                       |
+| user_id                  |
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | has_many :cart_items
+           v
++--------------------------+
+|       CartItem           |
+|--------------------------|
+| id                       |
+| cart_id                  |
+| product_id               |
+| quantity                 |
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | belongs_to :product
+           v
++--------------------------+
+|         Product          |
+|--------------------------|
+| id                       |
+| name                     |
+| description              |
+| price                    |
+| stock_quantity           |
+| created_at               |
+| updated_at               |
++--------------------------+
+
++--------------------------+
+|         Order            |
+|--------------------------|
+| id                       |
+| user_id                  |
+| total_amount             |
+| status (pending/paid)    |
+| created_at               |
+| updated_at               |
++--------------------------+
+           |
+           | has_many :order_items
+           v
++--------------------------+
+|       OrderItem          |
+|--------------------------|
+| id                       |
+| order_id                 |
+| product_id               |
+| quantity                 |
+| price                    |
+| created_at               |
+| updated_at               |
++--------------------------+
+
+Key Features:
+--------------
+1. **User Roles & Permissions**:
+   - Users are assigned roles (e.g., admin, user) through `role_id`.
+   - Permissions define which actions (e.g., manage, read) can be performed on which resources (e.g., Product, User).
+   - `PermissionRules` link roles to specific permissions.
+
+2. **Admin Management**:
+   - Admins can:
+     - **Create**, **update**, and **delete** products.
+     - Manage users by assigning or changing roles.
+   - Admin access is based on permissions stored in the database.
+
+3. **Cart System**:
+   - Each user has a cart created automatically upon signup.
+   - Users can add products to their carts and manage cart items.
+
+4. **Product Inventory**:
+   - Products have stock quantities, managed by admins.
+   - Regular users can only view product details and check stock availability.
+
+5. **Authentication & Authorization**:
+   - JWT tokens secure user sessions.
+   - Role-based access control (RBAC) ensures route protection:
+     - Admins access admin-only routes.
+     - Regular users can access cart and product browsing routes.
+
+6. **Future Scalability - Orders**:
+   - Orders track purchases, including status and total amount.
+   - OrderItems link orders to purchased products.
+
+7. **Validation Rules**:
+   - cart items should not exceed product stock.
+   - Validation on role assignments and permissions to prevent unauthorized actions.
+

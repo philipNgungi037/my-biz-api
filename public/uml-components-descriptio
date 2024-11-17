@@ -1,0 +1,58 @@
+UML-Style Backend Diagram Key Components:
+Users:
+
+Attributes: id, username, email, password_digest, role (user or admin).
+Associations:
+has_one :cart
+has_many :orders
+Automatic Cart creation after user signup.
+Roles and Permissions:
+
+Admins can manage users and products.
+Regular users can manage carts and orders.
+Products:
+
+Managed only by Admins.
+Attributes: id, name, description, price, stock.
+Carts and CartItems:
+
+Each user has one cart (has_one :cart).
+Cart contains multiple cart items (has_many :cart_items).
+CartItems reference products.
+Orders and OrderItems:
+
+Orders track user purchases.
+OrderItems link products with the purchased quantity and price.
+UML Diagram
+(Non-Graphical)
+
+User
+
+id, username, email, password_digest, role
+has_one :cart
+has_many :orders
+Cart
+
+id, user_id
+belongs_to :user
+has_many :cart_items
+CartItem
+
+id, cart_id, product_id, quantity
+belongs_to :cart
+belongs_to :product
+Product
+
+id, name, description, price, stock
+has_many :cart_items
+has_many :order_items
+Order
+
+id, user_id, total_amount, status
+belongs_to :user
+has_many :order_items
+OrderItem
+
+id, order_id, product_id, quantity, price
+belongs_to :order
+belongs_to :product

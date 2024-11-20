@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
     # GET /products
   def index
     products = Product.includes(:category).all
-    render json: products, each_serializer: ProductSerializer
+    render json: products.as_json(include: :category)
   end
 
   # GET /products/:id
@@ -15,14 +15,6 @@ class ProductsController < ApplicationController
   end
 
   # POST /products
-  def create
-    product = Product.new(product_params)
-    if product.save
-      render json: product, serializer: ProductSerializer, status: :created
-    else
-      render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
   def create
     category = Category.find_by(id: product_params[:category_id])
     return render json: { error: 'Category not found' }, status: :unprocessable_entity unless category

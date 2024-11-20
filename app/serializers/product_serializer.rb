@@ -1,4 +1,8 @@
 class ProductSerializer < ActiveModel::Serializer
   attributes :id, :name, :description, :price, :stock, :image_url
-  belongs_to :category
+  has_one :category
+
+  def imgUrl
+    object.image_url
+  end
 end
